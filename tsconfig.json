@@ -21,5 +21,15 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
-  }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/types/multer-express.d.ts",
+    "test"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".serverless",
+  ]
 }

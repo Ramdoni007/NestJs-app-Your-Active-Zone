@@ -1,3 +1,4 @@
 ignoredBuiltDependencies:
   - '@nestjs/core'
+  - aws-sdk
   - unrs-resolver
