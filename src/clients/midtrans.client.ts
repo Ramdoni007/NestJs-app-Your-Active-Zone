@@ -1,0 +1,33 @@
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { MidtransDto } from "src/dto/midtrans.dto";
+import * as Client  from "midtrans-client"
+import { getSecretValue } from "src/config/environment-config";
+import { generalConstant } from "src/constants/general.constant";
+import { IMidtransResponse } from "src/interfaces/midtrans.interface";
+@Injectable()
+export class MidtransClient { 
+    constructor(private readonly configService: ConfigService){ }
+
+    public async sendToMidtrans(data: MidtransDto): Promise<IMidtransResponse | any> { 
+        try { 
+        const snap = new Client.Snap({
+            isProduction: getSecretValue(this.configService).midtrans_is_production as any,
+            serverKey: getSecretValue(this.configService).midtrans_server_key as any,
+            clientKey: getSecretValue(this.configService).midtrans_client_key as any,
+        })
+        const response = await snap.createTransaction(data)
+        if (!response) {
+            return{ 
+                message:  generalConstant.MIDTRANS_ERROR 
+            }
+        }
+        return { 
+            token: response.token,
+            redirect_url: response.redirect_url
+        }
+        }catch (error) {
+            
+        }
+    }
+}
